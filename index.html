@@ -501,10 +501,11 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
         .attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '3 3');
       const t = evG.append('text').attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text(e.label);
       const w = t.node().getComputedTextLength();
-      let rowI = 0;
-      while (rowI < evRows && placed.some((p) => p.row === rowI && xe < p.x2 + 6 && xe + w > p.x1 - 6)) rowI++;
-      if (rowI >= evRows) { t.remove(); continue; }
       let tx = xe + 3; if (tx + w > width - m.right) tx = xe - 3 - w;
+      if (tx < 2) { t.remove(); continue; }
+      let rowI = 0;
+      while (rowI < evRows && placed.some((p) => p.row === rowI && tx < p.x2 + 6 && tx + w > p.x1 - 6)) rowI++;
+      if (rowI >= evRows) { t.remove(); continue; }
       t.attr('x', tx).attr('y', 11 + rowI * 15);
       placed.push({row: rowI, x1: tx, x2: tx + w});
     }
