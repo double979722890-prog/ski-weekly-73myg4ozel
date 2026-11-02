@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>欧洲滑雪需求周报</title>
+<style>
+:root {
+  --sk-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sk-serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+  --color-bg: #f6f7f9; --color-panel: #ffffff; --color-fg: #1b2330; --color-fg-muted: #5d6878;
+  --color-border-line: #dfe3ea; --color-ok: #1f7a4d; --color-warn: #a35d00; --color-bad: #b4342d;
+  --sk-s1: #2f62b8; --sk-s2: #d9822b; --sk-s3: #3a9a74; --sk-s4: #8a5cc2; --sk-s5: #c2477a; --sk-s6: #4f8fb8; --sk-s7: #8c8c3a; --sk-s8: #6b7280;
+  --cds-chart-muted: #9aa4b2; --cds-chart-grid: #eceff3; --cds-chart-axis: #b8c0cc; --cds-chart-reference: #8a94a3;
+  --cds-surface-popover: #ffffff; --cds-border: #dfe3ea; --cds-shadow-popover: 0 6px 20px rgba(20,30,50,.12); --cds-text-secondary: #5d6878;
+  --cds-radius: 8px; --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 16px; --cds-pad-xl: 24px;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 12px; --cds-gap-lg: 20px; --cds-gap-xl: 32px;
+  --cds-font-size-caption: 12.5px; --cds-font-size-body: 14.5px; --cds-font-size-heading: 16px; --cds-font-size-title: 28px;
+  --cds-font-weight-medium: 600; --cds-dur-slow: .3s; --cds-ease-out: cubic-bezier(.2,.7,.2,1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #11161d; --color-panel: #1a212b; --color-fg: #e7ebf1; --color-fg-muted: #9aa5b4;
+    --color-border-line: #2c3542; --color-ok: #4fbf8a; --color-warn: #e0a24a; --color-bad: #ef7a72;
+    --sk-s1: #6f9df0; --sk-s2: #f0a35c; --sk-s3: #5cc29a; --sk-s4: #b18ae6; --sk-s5: #e9799f; --sk-s6: #7fb6dc; --sk-s7: #c2c26a; --sk-s8: #9aa3af;
+    --cds-chart-muted: #6c7685; --cds-chart-grid: #232b36; --cds-chart-axis: #3a4554; --cds-chart-reference: #7d8899;
+    --cds-surface-popover: #1f2732; --cds-border: #2c3542; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.4); --cds-text-secondary: #9aa5b4;
+    color-scheme: dark;
+  }
+}
+html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--sk-sans); }
+#dash-root { max-width: 1240px; margin: 0 auto; padding-block: 24px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+[hidden] { display: none !important; }
+</style>
+<script src="d3.min.js"></script>
+<script src="data.js"></script>
+<script src="site_shim.js"></script>
+</head>
+<body>
+<div id="dash-root">
+<style>
+#dash-root .sk { display: flex; flex-direction: column; gap: var(--cds-gap-lg); font-family: var(--sk-sans); color: var(--color-fg); }
+.sk-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.sk-title { margin: 0; font-family: var(--sk-serif); font-weight: 400; font-size: var(--cds-font-size-title); text-wrap: balance; }
+.sk-take { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); max-width: 70ch; line-height: 1.6; }
+.sk .sk-take b { color: var(--color-fg); font-weight: 600; }
+.sk-bar { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: center; justify-content: space-between; }
+.sk-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 2px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); }
+.sk-seg button { font: inherit; font-size: var(--cds-font-size-caption); border: 0; background: transparent; color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-radius: var(--cds-radius); cursor: pointer; }
+.sk-seg button[aria-pressed="true"], .sk-seg button[aria-selected="true"] { background: var(--color-bg); color: var(--color-fg); box-shadow: 0 0 0 1px var(--color-border-line); font-weight: 600; }
+.sk-seg button:focus-visible, .sk-row:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 1px; }
+.sk-tabs { border-bottom: 1px solid var(--color-border-line); display: flex; gap: var(--cds-gap-md); overflow-x: auto; }
+.sk-tabs button { font: inherit; font-size: var(--cds-font-size-body); background: none; border: 0; border-bottom: 2px solid transparent; padding: var(--cds-pad-sm) 2px; color: var(--color-fg-muted); cursor: pointer; white-space: nowrap; }
+.sk-tabs button[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); }
+.sk-page { display: flex; flex-direction: column; gap: var(--cds-gap-lg); }
+.sk-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: var(--cds-gap-md); }
+.sk-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+.sk-lab { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sk-big { font-family: var(--sk-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.sk-sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.sk-up { color: var(--color-ok); } .sk-down { color: var(--color-bad); } .sk-flat { color: var(--color-fg-muted); }
+.sk-pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: var(--cds-font-size-body); font-weight: 600; border: 1px solid var(--color-border-line); width: fit-content; }
+.sk-pill.ph-淡季, .sk-pill.ph-收尾 { color: var(--color-fg-muted); }
+.sk-pill.ph-预热 { color: var(--color-warn); border-color: currentColor; }
+.sk-pill.ph-起量, .sk-pill.ph-高峰 { color: var(--color-ok); border-color: currentColor; }
+.sk-pill.ph-回落 { color: var(--color-bad); border-color: currentColor; }
+.sk-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+.sk-card h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.sk-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.55; max-width: 80ch; }
+.sk .sk-note b { color: var(--color-fg); font-weight: 600; }
+.sk-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sk-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sk-sw { width: 16px; height: 0; border-top: 2px solid var(--cds-chart-muted); display: inline-block; }
+.sk-sw.c0 { border-top: 3px solid var(--sk-c0); } .sk-sw.c1 { border-top-color: var(--sk-c1); } .sk-sw.dash { border-top: 2px dashed var(--sk-c0); }
+.sk-sw.band { height: 10px; border: 0; background: var(--sk-c0); opacity: .18; border-radius: 2px; }
+.sk-sw.ev { width: 0; height: 12px; border-top: 0; border-left: 1px dashed var(--cds-chart-reference); }
+.sk-chart { position: relative; width: 100%; min-height: 330px; }
+.sk-mini { position: relative; width: 100%; min-height: 420px; }
+.sk-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; font-variant-numeric: tabular-nums; }
+.sk-tip .h { color: var(--cds-text-secondary); margin-bottom: 2px; }
+.sk-tip i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+.sk-tw { overflow-x: auto; }
+.sk-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.sk-table th { text-align: left; font-weight: 600; color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; position: sticky; top: 0; background: var(--color-panel); }
+.sk-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.sk-table td.n, .sk-table th.n { text-align: right; white-space: nowrap; }
+.sk-table tr.sk-row { cursor: pointer; }
+.sk-table tr.sk-row:hover td { background: var(--color-bg); }
+.sk-table tr.sel td { background: var(--color-bg); font-weight: 600; }
+.sk-table tr.past td { color: var(--color-fg-muted); opacity: .6; }
+.sk-table td.wide { min-width: 16rem; }
+.sk-tag { display: inline-block; padding: 0 6px; border-radius: 999px; border: 1px solid var(--color-border-line); white-space: nowrap; }
+.sk-tag.cold { color: var(--color-ok); border-color: currentColor; } .sk-tag.warm { color: var(--color-bad); border-color: currentColor; }
+.sk-tag.warn { color: var(--color-warn); border-color: currentColor; }
+.sk-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--cds-gap-md); }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+[data-dash-source-state=empty] { color: transparent; }
+</style>
+
+<div class="sk" id="top">
+  <header class="sk-head">
+    <h1 class="sk-title">欧洲滑雪需求周报</h1>
+    <p class="sk-note" id="sk-updated"></p>
+    <p class="sk-take" id="takeaway"><b data-draw="t-st" data-source="demand_summary">—</b><b data-draw="t-cat" data-source="demand_summary">—</b>：按往年节奏，现在处于<b data-draw="t-phase" data-source="demand_summary">—</b>阶段；最新一周搜索量<b data-draw="t-yoy" data-source="demand_summary">—</b>；离往年的全年高峰还有 <b data-draw="t-weeks" data-source="demand_summary">—</b> 周。需求节奏主要由假期和节日决定，天气只起很小的作用。</p>
+  </header>
+
+  <div class="sk-bar">
+    <div class="sk-seg" role="group" aria-label="站点" id="pick-station">
+      <button type="button" data-station="DE" aria-pressed="true">德国站</button>
+      <button type="button" data-station="UK" aria-pressed="false">英国站</button>
+      <button type="button" data-station="FR" aria-pressed="false">法国站</button>
+      <button type="button" data-station="IT" aria-pressed="false">意大利站</button>
+      <button type="button" data-station="ES" aria-pressed="false">西班牙站</button>
+    </div>
+    <div class="sk-seg" role="group" aria-label="品类" id="pick-cat">
+      <button type="button" data-cat="goggles" aria-pressed="true">滑雪眼镜</button>
+      <button type="button" data-cat="socks" aria-pressed="false">滑雪袜</button>
+    </div>
+  </div>
+
+  <nav class="sk-tabs" role="tablist" aria-label="页面">
+    <button type="button" role="tab" data-tab="demand" aria-selected="true">需求节奏</button>
+    <button type="button" role="tab" data-tab="weather" aria-selected="false">天气与雪况</button>
+    <button type="button" role="tab" data-tab="calendar" aria-selected="false">日历</button>
+    <button type="button" role="tab" data-tab="notes" aria-selected="false">数据说明</button>
+  </nav>
+
+  <!-- ===================== 需求节奏 ===================== -->
+  <section class="sk-page" id="demand" role="tabpanel">
+    <div class="sk-tiles" id="tiles" data-fetchpriority="high">
+      <div class="sk-tile" id="tile-week">
+        <span class="sk-lab">最新一周搜索量 · <span data-draw="k-range" data-source="demand_summary">—</span></span>
+        <span class="sk-big" data-draw="k-vol" data-source="demand_summary">—</span>
+        <span class="sk-sub">比去年同期 <span data-draw="k-yoy" data-source="demand_summary">—</span></span>
+      </div>
+      <div class="sk-tile" id="tile-season">
+        <span class="sk-lab">本季累计（8 月起）</span>
+        <span class="sk-big" data-draw="k-std" data-source="demand_summary">—</span>
+        <span class="sk-sub">比去年同期 <span data-draw="k-std-yoy" data-source="demand_summary">—</span></span>
+      </div>
+      <div class="sk-tile" id="tile-phase">
+        <span class="sk-lab">当前阶段（按往年节奏）</span>
+        <span class="sk-pill" data-draw="k-phase" data-source="demand_summary">—</span>
+        <span class="sk-sub">下一阶段 <span data-draw="k-next" data-source="demand_summary">—</span>，约 <span data-draw="k-next-date" data-source="demand_summary">—</span> 那周</span>
+      </div>
+      <div class="sk-tile" id="tile-peak">
+        <span class="sk-lab">离往年全年高峰</span>
+        <span class="sk-big"><span data-draw="k-peak" data-source="demand_summary">—</span> 周</span>
+        <span class="sk-sub">往年高峰在 <span data-draw="k-peak-date" data-source="demand_summary">—</span> 那周</span>
+      </div>
+      <div class="sk-tile" id="tile-fc">
+        <span class="sk-lab">未来 4 周预计搜索量</span>
+        <span class="sk-big" data-draw="k-fc4" data-source="demand_summary">—</span>
+        <span class="sk-sub">去年同期 <span data-draw="k-ly4" data-source="demand_summary">—</span></span>
+      </div>
+    </div>
+
+    <div class="sk-card" id="season-card">
+      <h2>每周搜索量：本季和往年对比</h2>
+      <p class="sk-note">往年的曲线已对齐到今年同一周。虚线是未来 8 周的预计，阴影是前三季同期走法给出的范围。竖虚线是这个站点的关键假期和大促。图下方的色带是往年这一周通常所处的阶段。</p>
+      <div class="sk-legend">
+        <span><i class="sk-sw c0"></i>本季 2026-27</span>
+        <span><i class="sk-sw c1"></i>上季 2025-26</span>
+        <span><i class="sk-sw"></i>更早两季</span>
+        <span><i class="sk-sw dash"></i>预计（中位）</span>
+        <span><i class="sk-sw band"></i>往年同期范围</span>
+        <span><i class="sk-sw ev"></i>假期 / 大促</span>
+      </div>
+      <div class="sk-chart" id="season-chart" data-draw="chart-season" data-source="demand_weekly demand_forecast calendar phase_curve"></div>
+      <p class="sk-note">这条线加总的关键词：<span data-draw="kw" data-source="demand_summary">—</span>。预计的方法：用最近两周的搜索量，乘以前三个雪季同一时段的增长倍数。用前两季回测，这个品类 4 周后预计的中位误差约 <b data-draw="bt" data-source="forecast_backtest">—</b>。</p>
+    </div>
+
+    <div class="sk-card" id="overview-card">
+      <h2>五个站点一览</h2>
+      <p class="sk-note">点一行即可切换上面的站点和品类。“量小”表示上季旺季每周搜索量不到 3,000 次，只适合看方向。</p>
+      <div class="sk-tw">
+        <table class="sk-table" id="overview" data-source="demand_summary" data-row-key="station,cat">
+          <thead><tr>
+            <th data-field="station_name">站点</th>
+            <th data-field="cat_name">品类</th>
+            <th data-field="phase">当前阶段</th>
+            <th class="n" data-field="volume">最新一周</th>
+            <th class="n" data-field="yoy">同比</th>
+            <th data-field="next_phase">下一阶段</th>
+            <th data-field="typical_peak_week">往年高峰周</th>
+            <th data-field="quality">数据</th>
+          </tr></thead>
+          <tbody data-draw="overview-body" data-source="demand_summary"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 天气 ===================== -->
+  <section class="sk-page" id="weather" role="tabpanel" hidden>
+    <div class="sk-card" id="effect-card">
+      <h2>天气对需求有多大影响</h2>
+      <p class="sk-note">在<b data-draw="ef-name">—</b>，某周比常年同期冷 1°C，滑雪眼镜搜索量约 <b data-draw="ef-g" data-source="weather_effect">—</b>，滑雪袜约 <b data-draw="ef-s" data-source="weather_effect">—</b>（已去掉季节规律，基于 2022-23 至 2025-26 四个雪季）。所以天气偏冷时节奏可能略快一点，但不足以单独作为加预算的理由。城市下雪和阿尔卑斯雪况与搜索量基本无关。</p>
+    </div>
+
+    <div class="sk-card" id="regions-card">
+      <h2>买家所在地天气</h2>
+      <p class="sk-note">“比常年”是和 2021–2025 年同期平均相比。未来 14 天的判断：低于常年 2.5°C 以上为明显偏冷，1–2.5°C 为偏冷，暖的方向同理。</p>
+      <div class="sk-tw">
+        <table class="sk-table" id="regions" data-source="weather_regions" data-row-key="region">
+          <thead><tr>
+            <th data-field="name">地区</th>
+            <th data-field="cities">代表城市</th>
+            <th class="n" data-field="past7_temp">过去 7 天均温</th>
+            <th class="n" data-field="past7_anom">比常年</th>
+            <th class="n" data-field="next14_temp">未来 14 天均温</th>
+            <th class="n" data-field="next14_anom">比常年</th>
+            <th class="n" data-field="next14_snow_cm">未来 14 天降雪</th>
+            <th data-field="flag">判断</th>
+          </tr></thead>
+          <tbody data-draw="regions-body" data-source="weather_regions"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sk-card" id="mini-card">
+      <h2>每日气温：最近 30 天和未来 15 天</h2>
+      <p class="sk-note">实线是日均气温（右侧虚线部分是预报），灰虚线是常年同期。所有小图用同一个刻度。</p>
+      <div class="sk-mini" id="mini-chart" data-draw="wx-mini" data-source="weather_daily weather_regions"></div>
+    </div>
+
+    <div class="sk-card" id="resorts-card">
+      <h2>主要雪场雪况</h2>
+      <p class="sk-note">雪深来自历史再分析数据，截至表中日期；“近 5 年同日”是 2021–2025 年同一天的平均。10 月底多数雪场还没开始积雪，雪深在 11 月中下旬才有比较意义。</p>
+      <div class="sk-tw">
+        <table class="sk-table" id="resorts" data-source="resorts" data-row-key="id">
+          <thead><tr>
+            <th data-field="name">雪场</th>
+            <th data-field="country">国家</th>
+            <th class="n" data-field="elev">海拔(米)</th>
+            <th class="n" data-field="depth_cm">雪深(厘米)</th>
+            <th class="n" data-field="depth_ly_cm">去年同日</th>
+            <th class="n" data-field="depth_avg5_cm">近 5 年同日</th>
+            <th class="n" data-field="new7_cm">近 7 天新雪</th>
+            <th class="n" data-field="fc_snow_cm">未来降雪预报</th>
+            <th data-field="status">雪况</th>
+          </tr></thead>
+          <tbody data-draw="resorts-body" data-source="resorts"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 日历 ===================== -->
+  <section class="sk-page" id="calendar" role="tabpanel" hidden>
+    <div class="sk-card" id="cal-card">
+      <h2>2026-27 雪季关键日期</h2>
+      <p class="sk-note">德国、英国、意大利站的全年高峰都落在圣诞假期里（1 月第 1–2 周），法国站还有 2 月冬假这一波。广告和库存要在假期开始前到位。当前站点的事件加粗显示。</p>
+      <div class="sk-tw">
+        <table class="sk-table" id="cal" data-source="calendar" data-row-key="id">
+          <thead><tr>
+            <th data-field="start">开始</th>
+            <th data-field="end">结束</th>
+            <th data-field="market">市场</th>
+            <th data-field="event">事件</th>
+            <th data-field="scope">范围</th>
+            <th data-field="note">说明</th>
+            <th data-field="source">来源</th>
+          </tr></thead>
+          <tbody data-draw="cal-body" data-source="calendar"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 数据说明 ===================== -->
+  <section class="sk-page" id="notes" role="tabpanel" hidden>
+    <div class="sk-card" id="status-card">
+      <h2>数据状态和方法</h2>
+      <p class="sk-note">取不到或有问题的数据都列在这里，不会悄悄跳过。</p>
+      <div class="sk-tw">
+        <table class="sk-table" id="status" data-source="data_status" data-row-key="id">
+          <thead><tr>
+            <th data-field="area">类别</th>
+            <th data-field="item">项目</th>
+            <th data-field="status">状态</th>
+            <th data-field="detail">说明</th>
+          </tr></thead>
+          <tbody data-draw="status-body" data-source="data_status"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const STN = {DE: '德国站', UK: '英国站', FR: '法国站', IT: '意大利站', ES: '西班牙站'};
+  const CAT = {goggles: '滑雪眼镜', socks: '滑雪袜'};
+  const MKT = {DE: 'DE', UK: 'UK', FR: 'FR', IT: 'IT', ES: 'ES'};
+  const num = (v) => (v === null || v === undefined || v === '' ? null : Number(v));
+  const fmtN = (v) => (v === null ? '—' : d3.format(',')(Math.round(v)));
+  const fmtP = (v) => (v === null ? '—' : (v > 0 ? '+' : '') + d3.format('.1%')(v).replace('−', '-'));
+  const fmtT = (v) => (v === null ? '—' : d3.format('.1f')(v) + '°C');
+  const fmtD = (v) => (v === null ? '—' : (v > 0 ? '+' : '') + d3.format('.1f')(v) + '°C');
+  const dt = (s) => new Date(s + 'T00:00:00Z');
+  const fmtDay = (s) => { const x = dt(s); return (x.getUTCMonth() + 1) + '月' + x.getUTCDate() + '日'; };
+  const fmtY = (v) => (v >= 10000 ? d3.format('~')(v / 10000) + '万' : d3.format(',')(v));
+  const sel = () => { const p = dash.params(); return {st: p.station || 'DE', cat: p.cat || 'goggles'}; };
+  const where = (r) => 'station=' + encodeURIComponent(r.station) + '&cat=' + encodeURIComponent(r.cat);
+  window.skHelpers = {num, fmtN, fmtP, fmtT, fmtD, dt, fmtDay, fmtY, sel, STN, CAT, MKT};
+
+  // ---------- controls (listen + aria only)
+  const setPressed = () => {
+    const {st, cat} = sel();
+    document.querySelectorAll('[data-station]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.station === st)));
+    document.querySelectorAll('[data-cat]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === cat)));
+  };
+  document.querySelectorAll('[data-station]').forEach((b) => b.addEventListener('click', () => dash.setParams({station: b.dataset.station})));
+  document.querySelectorAll('[data-cat]').forEach((b) => b.addEventListener('click', () => dash.setParams({cat: b.dataset.cat})));
+  const tabs = ['demand', 'weather', 'calendar', 'notes'];
+  const show = (id, link) => {
+    if (!tabs.includes(id)) return;
+    document.querySelectorAll('.sk-page').forEach((s) => { s.hidden = s.id !== id; });
+    document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === id)));
+    if (link) dash.setLink(id);
+  };
+  document.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => show(b.dataset.tab, true)));
+  const named = location.hash.slice(1);
+  if (tabs.includes(named)) show(named, false);
+  dash.onData(setPressed);
+
+  // ---------- summary helpers
+  const row = () => {
+    const g = dash.data('demand_summary');
+    if (g.status !== 'ok') return null;
+    const {st, cat} = sel();
+    return g.data.find((r) => r.station === st && r.cat === cat) || null;
+  };
+  const cell = (name, field, render) => dash.draw(name, (el) => {
+    const r = row();
+    el.classList.remove('sk-up', 'sk-down', 'sk-flat');
+    if (!r) { el.textContent = '—'; return; }
+    el.setAttribute('data-where', where(r));
+    el.setAttribute('data-field', typeof field === 'function' ? field(r) : field);
+    render(el, r);
+  });
+  const delta = (el, v, note) => {
+    if (v === null) { el.textContent = note || '不可比'; el.classList.add('sk-flat'); return; }
+    el.textContent = fmtP(v);
+    el.classList.add(v > 0.005 ? 'sk-up' : v < -0.005 ? 'sk-down' : 'sk-flat');
+  };
+
+  cell('t-st', 'station_name', (el, r) => { el.textContent = r.station_name; });
+  cell('t-cat', 'cat_name', (el, r) => { el.textContent = r.cat_name; });
+  cell('t-phase', 'phase', (el, r) => { el.textContent = r.phase; });
+  cell('t-yoy', (r) => (num(r.yoy) === null ? 'yoy_note' : 'yoy'), (el, r) => {
+    const v = num(r.yoy);
+    el.textContent = v === null ? (r.yoy_note || '无法和去年比较') : '比去年同期 ' + fmtP(v);
+  });
+  cell('t-weeks', 'weeks_to_peak', (el, r) => { el.textContent = String(num(r.weeks_to_peak)); });
+  cell('k-range', 'latest_week', (el, r) => { el.textContent = fmtDay(r.latest_week) + '–' + fmtDay(r.latest_week_end); });
+  cell('k-vol', 'volume', (el, r) => { el.textContent = fmtN(num(r.volume)); });
+  cell('k-yoy', (r) => (num(r.yoy) === null ? 'yoy_note' : 'yoy'), (el, r) => delta(el, num(r.yoy), r.yoy_note));
+  cell('k-std', 'season_to_date', (el, r) => { el.textContent = fmtN(num(r.season_to_date)); });
+  cell('k-std-yoy', 'yoy_season', (el, r) => delta(el, num(r.yoy_season), '去年同期量太小，不可比'));
+  cell('k-phase', 'phase', (el, r) => {
+    el.className = 'sk-pill ph-' + r.phase;
+    el.textContent = r.phase;
+  });
+  cell('k-next', 'next_phase', (el, r) => { el.textContent = r.next_phase || '—'; });
+  cell('k-next-date', 'next_phase_week', (el, r) => { el.textContent = r.next_phase_week ? fmtDay(r.next_phase_week) : '—'; });
+  cell('k-peak', 'weeks_to_peak', (el, r) => { el.textContent = String(num(r.weeks_to_peak)); });
+  cell('k-peak-date', 'typical_peak_week', (el, r) => { el.textContent = fmtDay(r.typical_peak_week); });
+  cell('k-fc4', 'fc_next4', (el, r) => { el.textContent = fmtN(num(r.fc_next4)); });
+  cell('k-ly4', 'ly_next4', (el, r) => { el.textContent = fmtN(num(r.ly_next4)); });
+  cell('kw', 'keywords', (el, r) => { el.textContent = r.keywords; });
+
+  dash.draw('bt', (el) => {
+    const g = dash.data('forecast_backtest');
+    if (g.status !== 'ok') { el.textContent = '—'; return; }
+    const {st, cat} = sel();
+    const r = g.data.find((x) => x.station === st && x.cat === cat);
+    if (!r) { el.textContent = '—'; return; }
+    el.setAttribute('data-where', 'station=' + st + '&cat=' + cat);
+    el.setAttribute('data-field', 'mape');
+    el.textContent = d3.format('.0%')(num(r.mape));
+  });
+
+  // ---------- overview table
+  dash.draw('overview-body', (tb) => {
+    const g = dash.data('demand_summary');
+    tb.replaceChildren();
+    if (g.status !== 'ok') return;
+    const {st, cat} = sel();
+    const order = ['DE', 'UK', 'FR', 'IT', 'ES'];
+    const rows = g.data.slice().sort((a, b) => order.indexOf(a.station) - order.indexOf(b.station) || (a.cat === 'goggles' ? -1 : 1));
+    for (const r of rows) {
+      const tr = document.createElement('tr');
+      tr.className = 'sk-row' + (r.station === st && r.cat === cat ? ' sel' : '');
+      tr.dataset.key = encodeURIComponent(r.station) + ',' + encodeURIComponent(r.cat);
+      tr.tabIndex = 0;
+      const yoy = num(r.yoy);
+      const cells = [
+        [r.station_name], [r.cat_name], [r.phase], [fmtN(num(r.volume)), 'n'],
+        [yoy === null ? '不可比' : fmtP(yoy), 'n', yoy === null ? 'sk-flat' : yoy > 0 ? 'sk-up' : 'sk-down'],
+        [r.next_phase ? r.next_phase + '（' + fmtDay(r.next_phase_week) + '）' : '—'],
+        [fmtDay(r.typical_peak_week)], [r.quality],
+      ];
+      for (const [t, c, c2] of cells) {
+        const td = document.createElement('td');
+        td.textContent = t;
+        if (c) td.classList.add(c);
+        if (c2) td.classList.add(c2);
+        tr.append(td);
+      }
+      const go = () => dash.setParams({station: r.station, cat: r.cat});
+      tr.addEventListener('click', go);
+      tr.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+      tb.append(tr);
+    }
+  });
+})();
+</script>
+
+<script>
+(() => {
+  const {num, fmtN, dt, fmtDay, fmtY, sel, MKT} = window.skHelpers;
+  const PH_ALPHA = {'淡季': 0.06, '预热': 0.22, '起量': 0.45, '高峰': 0.75, '回落': 0.35, '收尾': 0.12};
+  const fmtWeek = (d) => (d.getUTCMonth() + 1) + '月' + d.getUTCDate() + '日';
+
+  dash.draw('chart-season', (el) => {
+    el.style.setProperty('--sk-c0', dash.colors[0]);
+    el.style.setProperty('--sk-c1', dash.colors[1]);
+    const card = el.closest('.sk-card');
+    if (card) { card.style.setProperty('--sk-c0', dash.colors[0]); card.style.setProperty('--sk-c1', dash.colors[1]); }
+    el.replaceChildren();
+    const W = dash.data('demand_weekly'), F = dash.data('demand_forecast'), C = dash.data('calendar'), P = dash.data('phase_curve');
+    if ([W, F, C, P].some((g) => g.status !== 'ok')) return;
+    const {st, cat} = sel();
+    const x0 = dt('2026-08-30'), x1 = dt('2027-03-28');
+    const rows = W.data.filter((r) => r.station === st && r.cat === cat)
+      .map((r) => ({season: r.season, x: dt(r.aligned), v: num(r.volume), week: r.week}))
+      .filter((r) => r.x >= x0 && r.x <= x1);
+    const seasons = ['2023-24', '2024-25', '2025-26', '2026-27'];
+    const series = seasons.map((s) => ({s, pts: rows.filter((r) => r.season === s).sort((a, b) => a.x - b.x)}));
+    const fc = F.data.filter((r) => r.station === st && r.cat === cat).map((r) => ({x: dt(r.week), mid: num(r.mid), lo: num(r.low), hi: num(r.high)}));
+    const cur = series[3].pts;
+    if (cur.length && fc.length) { const last = cur[cur.length - 1]; fc.unshift({x: last.x, mid: last.v, lo: last.v, hi: last.v}); }
+    const ph = P.data.filter((r) => r.station === st && r.cat === cat).map((r) => ({x: dt(r.week), phase: r.phase}));
+    const evs = C.data.filter((r) => (r.key === true || r.key === 'true') && (r.market === '全部' || r.market === MKT[st]))
+      .map((r) => ({x: dt(r.start), label: r.event})).filter((e) => e.x >= x0 && e.x <= x1).sort((a, b) => a.x - b.x);
+
+    const width = Math.max(280, el.clientWidth);
+    const narrow = width < 560;
+    const evRows = narrow ? 3 : 2;
+    const m = {top: 14 + evRows * 15, right: 12, bottom: 44, left: 48};
+    const height = narrow ? 300 : 330;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img').attr('aria-label', '每周搜索量折线图');
+    const ymax = d3.max([...rows.map((r) => r.v), ...fc.map((f) => f.hi)]) || 1;
+    const y = d3.scaleLinear([0, ymax * 1.05], [height - m.bottom, m.top]).nice();
+    // left margin from widest tick
+    const ticks = y.ticks(narrow ? 4 : 5);
+    const probe = svg.append('text').attr('font-size', 11);
+    let lw = 0; for (const t of ticks) { probe.text(fmtY(t)); lw = Math.max(lw, probe.node().getComputedTextLength()); }
+    probe.remove(); m.left = Math.ceil(lw) + 10;
+    const x = d3.scaleUtc([x0, x1], [m.left, width - m.right]);
+
+    const g = svg.append('g');
+    g.append('g').selectAll('line').data(ticks).join('line')
+      .attr('x1', m.left).attr('x2', width - m.right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t))
+      .attr('stroke', 'var(--cds-chart-grid)').attr('stroke-width', 1);
+    g.append('g').selectAll('text').data(ticks).join('text')
+      .attr('x', m.left - 6).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end')
+      .attr('fill', 'var(--color-fg-muted)').attr('font-size', 11).text(fmtY);
+    // phase strip
+    const stripY = height - m.bottom + 22, stripH = 8;
+    const bw = Math.max(1, x(dt('2026-09-06')) - x(dt('2026-08-30')));
+    g.append('g').selectAll('rect').data(ph.filter((p) => p.x >= x0 && p.x <= x1)).join('rect')
+      .attr('x', (p) => x(p.x)).attr('width', bw + 0.5).attr('y', stripY).attr('height', stripH)
+      .attr('fill', dash.colors[0]).attr('fill-opacity', (p) => PH_ALPHA[p.phase] ?? 0.05);
+    // phase labels where a run is wide enough
+    const runs = [];
+    for (const p of ph.filter((p) => p.x >= x0 && p.x <= x1)) {
+      const lr = runs[runs.length - 1];
+      if (lr && lr.phase === p.phase) lr.x2 = p.x; else runs.push({phase: p.phase, x1: p.x, x2: p.x});
+    }
+    g.append('g').selectAll('text').data(runs.filter((r) => x(r.x2) + bw - x(r.x1) > 34 && (x(r.x1) + x(r.x2) + bw) / 2 + 14 < width - m.right && (x(r.x1) + x(r.x2) + bw) / 2 - 14 > m.left)).join('text')
+      .attr('x', (r) => (x(r.x1) + x(r.x2) + bw) / 2).attr('y', stripY + stripH + 11).attr('text-anchor', 'middle')
+      .attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text((r) => r.phase);
+    // month axis
+    const months = d3.utcMonth.range(dt('2026-09-01'), x1);
+    g.append('g').selectAll('text').data(months).join('text')
+      .attr('x', (d) => x(d)).attr('y', height - m.bottom + 14).attr('text-anchor', 'middle')
+      .attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((d) => (d.getUTCMonth() + 1) + '月');
+    g.append('line').attr('x1', m.left).attr('x2', width - m.right).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-axis)');
+    // events
+    const evG = g.append('g');
+    const placed = [];
+    for (const e of evs) {
+      const xe = x(e.x);
+      evG.append('line').attr('x1', xe).attr('x2', xe).attr('y1', m.top - 2).attr('y2', y(0))
+        .attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '3 3');
+      const t = evG.append('text').attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text(e.label);
+      const w = t.node().getComputedTextLength();
+      let rowI = 0;
+      while (rowI < evRows && placed.some((p) => p.row === rowI && xe < p.x2 + 6 && xe + w > p.x1 - 6)) rowI++;
+      if (rowI >= evRows) { t.remove(); continue; }
+      let tx = xe + 3; if (tx + w > width - m.right) tx = xe - 3 - w;
+      t.attr('x', tx).attr('y', 11 + rowI * 15);
+      placed.push({row: rowI, x1: tx, x2: tx + w});
+    }
+    // forecast band + mid
+    if (fc.length > 1) {
+      g.append('path').datum(fc).attr('fill', dash.colors[0]).attr('fill-opacity', 0.14)
+        .attr('d', d3.area().x((f) => x(f.x)).y0((f) => y(f.lo)).y1((f) => y(f.hi)));
+      g.append('path').datum(fc).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 2)
+        .attr('stroke-dasharray', '5 4').attr('d', d3.line().x((f) => x(f.x)).y((f) => y(f.mid)));
+    }
+    // season lines
+    const line = d3.line().x((p) => x(p.x)).y((p) => y(p.v));
+    const style = {'2023-24': ['var(--cds-chart-muted)', 1.5, 0.6], '2024-25': ['var(--cds-chart-muted)', 1.5, 0.9], '2025-26': [dash.colors[1], 2, 1], '2026-27': [dash.colors[0], 2.75, 1]};
+    for (const s of series) {
+      if (!s.pts.length) continue;
+      const [c, w, o] = style[s.s];
+      g.append('path').datum(s.pts).attr('fill', 'none').attr('stroke', c).attr('stroke-width', w).attr('stroke-opacity', o)
+        .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('d', line);
+    }
+    if (cur.length) {
+      const last = cur[cur.length - 1];
+      g.append('circle').attr('cx', x(last.x)).attr('cy', y(last.v)).attr('r', 4).attr('fill', dash.colors[0]);
+    }
+    // tooltip
+    const tip = d3.select(el).append('div').attr('class', 'sk-tip').style('display', 'none');
+    const hover = g.append('line').attr('y1', m.top).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-axis)').style('display', 'none');
+    const weeks = d3.utcWeek.range(x0, d3.utcDay.offset(x1, 1));
+    svg.append('rect').attr('x', m.left).attr('y', m.top).attr('width', width - m.left - m.right).attr('height', y(0) - m.top)
+      .attr('fill', 'transparent')
+      .on('mousemove', (ev) => {
+        const [mx] = d3.pointer(ev);
+        const xd = x.invert(mx);
+        const wk = weeks.reduce((a, b) => (Math.abs(b - xd) < Math.abs(a - xd) ? b : a));
+        const vals = series.map((s) => ({s: s.s, p: s.pts.find((p) => +p.x === +wk)}));
+        const f = fc.slice(1).find((q) => +q.x === +wk);
+        hover.style('display', null).attr('x1', x(wk)).attr('x2', x(wk));
+        const lines = vals.filter((v) => v.p).reverse().map((v) => {
+          const c = style[v.s][0];
+          return `<div><i style="background:${c}"></i>${v.s}　${fmtN(v.p.v)}</div>`;
+        });
+        if (f) lines.unshift(`<div><i style="background:${dash.colors[0]};opacity:.5"></i>预计　${fmtN(f.mid)}（${fmtN(f.lo)}–${fmtN(f.hi)}）</div>`);
+        if (!lines.length) { tip.style('display', 'none'); return; }
+        const node = tip.style('display', null).node();
+        node.replaceChildren();
+        const h = document.createElement('div'); h.className = 'h'; h.textContent = fmtWeek(wk) + ' 那周（本季日历）';
+        node.append(h);
+        for (const l of lines) { const dv = document.createElement('div'); dv.innerHTML = l; node.append(dv.firstChild); }
+        const tw = node.offsetWidth, th = node.offsetHeight;
+        let left = x(wk) * el.clientWidth / width + 12; if (left + tw > el.clientWidth) left = x(wk) * el.clientWidth / width - tw - 12;
+        tip.style('left', Math.max(0, left) + 'px').style('top', Math.max(0, m.top * el.clientWidth / width) + 'px');
+      })
+      .on('mouseleave', () => { tip.style('display', 'none'); hover.style('display', 'none'); });
+  });
+})();
+</script>
+
+<script>
+(() => {
+  const {num, fmtN, fmtP, fmtT, fmtD, dt, fmtDay, sel, STN, CAT, MKT} = window.skHelpers;
+
+  // ---------- weather effect sentence
+  const eff = (name, fn) => dash.draw(name, (el) => {
+    const g = dash.data('weather_effect');
+    if (g.status !== 'ok') { el.textContent = '—'; return; }
+    fn(el, g.data, sel().st);
+  });
+  dash.draw('ef-name', (el) => { el.textContent = STN[sel().st]; });
+  const effCat = (cat) => (el, rows, st) => {
+    const r = rows.find((x) => x.station === st && x.cat === cat);
+    if (!r) { el.textContent = '—'; return; }
+    el.setAttribute('data-where', 'station=' + st + '&cat=' + cat);
+    el.setAttribute('data-field', 'per_1c_colder');
+    el.textContent = fmtP(num(r.per_1c_colder));
+  };
+  eff('ef-g', effCat('goggles'));
+  eff('ef-s', effCat('socks'));
+
+  const tagClass = (flag) => (flag.includes('冷') ? 'cold' : flag.includes('暖') ? 'warm' : '');
+  const td = (tr, text, cls) => { const c = document.createElement('td'); c.textContent = text; if (cls) c.className = cls; tr.append(c); return c; };
+
+  dash.draw('regions-body', (tb) => {
+    const g = dash.data('weather_regions');
+    tb.replaceChildren();
+    if (g.status !== 'ok') return;
+    const st = sel().st;
+    for (const r of g.data) {
+      const tr = document.createElement('tr');
+      tr.dataset.key = encodeURIComponent(r.region);
+      if (r.group === MKT[st]) tr.className = 'sel';
+      td(tr, r.name); td(tr, r.cities);
+      td(tr, fmtT(num(r.past7_temp)), 'n'); td(tr, fmtD(num(r.past7_anom)), 'n');
+      td(tr, fmtT(num(r.next14_temp)), 'n'); td(tr, fmtD(num(r.next14_anom)), 'n');
+      td(tr, d3.format('.1f')(num(r.next14_snow_cm)) + ' 厘米', 'n');
+      const c = td(tr, ''); const s = document.createElement('span'); s.className = 'sk-tag ' + tagClass(r.flag); s.textContent = r.flag; c.append(s);
+      tb.append(tr);
+    }
+  });
+
+  dash.draw('resorts-body', (tb) => {
+    const g = dash.data('resorts');
+    tb.replaceChildren();
+    if (g.status !== 'ok') return;
+    for (const r of g.data) {
+      const tr = document.createElement('tr');
+      tr.dataset.key = encodeURIComponent(r.id);
+      const cm = (v) => (num(v) === null ? '—' : d3.format('.0f')(num(v)));
+      td(tr, r.name); td(tr, r.country); td(tr, fmtN(num(r.elev)), 'n');
+      td(tr, cm(r.depth_cm) + (num(r.depth_cm) === null ? '' : '（' + fmtDay(r.as_of) + '）'), 'n');
+      td(tr, cm(r.depth_ly_cm), 'n'); td(tr, cm(r.depth_avg5_cm), 'n');
+      td(tr, d3.format('.1f')(num(r.new7_cm)) + ' 厘米', 'n');
+      td(tr, d3.format('.1f')(num(r.fc_snow_cm)) + ' 厘米 / ' + num(r.fc_days) + ' 天', 'n');
+      const c = td(tr, ''); const s = document.createElement('span');
+      s.className = 'sk-tag ' + (r.status === '偏少' ? 'warm' : r.status === '偏多' ? 'cold' : r.status === '数据不可用' ? 'warn' : '');
+      s.textContent = r.status; c.append(s);
+      tb.append(tr);
+    }
+  });
+
+  dash.draw('cal-body', (tb) => {
+    const g = dash.data('calendar');
+    tb.replaceChildren();
+    if (g.status !== 'ok') return;
+    const st = sel().st;
+    const today = new Date();
+    const rows = g.data.slice().sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
+    for (const r of rows) {
+      const tr = document.createElement('tr');
+      tr.dataset.key = encodeURIComponent(r.id);
+      const cls = [];
+      if (r.market === MKT[st]) cls.push('sel');
+      if (dt(r.end) < today) cls.push('past');
+      tr.className = cls.join(' ');
+      td(tr, fmtDay(r.start)); td(tr, fmtDay(r.end)); td(tr, r.market); td(tr, r.event);
+      td(tr, r.scope, 'wide'); td(tr, r.note, 'wide'); td(tr, r.source);
+      tb.append(tr);
+    }
+  });
+
+  dash.draw('status-body', (tb) => {
+    const g = dash.data('data_status');
+    tb.replaceChildren();
+    if (g.status !== 'ok') return;
+    for (const r of g.data) {
+      const tr = document.createElement('tr');
+      tr.dataset.key = encodeURIComponent(r.id);
+      td(tr, r.area); td(tr, r.item);
+      const c = td(tr, ''); const s = document.createElement('span');
+      s.className = 'sk-tag ' + (['正常', '已校正'].includes(r.status) ? '' : 'warn'); s.textContent = r.status; c.append(s);
+      td(tr, r.detail, 'wide');
+      tb.append(tr);
+    }
+  });
+
+  // ---------- small multiples of daily temperature
+  dash.draw('wx-mini', (el) => {
+    el.replaceChildren();
+    const D = dash.data('weather_daily'), R = dash.data('weather_regions');
+    if (D.status !== 'ok' || R.status !== 'ok') return;
+    const regions = R.data.map((r) => ({id: r.region, name: r.name, group: r.group}));
+    const pts = D.data.map((r) => ({id: r.region, x: dt(r.date), t: num(r.temp), n: num(r.normal), fc: r.kind === '预报'}));
+    const width = Math.max(280, el.clientWidth);
+    const cols = width < 520 ? 2 : width < 900 ? 3 : 4;
+    const cw = width / cols, ch = 118, rowsN = Math.ceil(regions.length / cols);
+    const height = rowsN * ch;
+    el.style.minHeight = height + 'px';
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img').attr('aria-label', '各地每日气温小图');
+    const ext = d3.extent(pts.flatMap((p) => [p.t, p.n]));
+    const xs = d3.extent(pts, (p) => p.x);
+    const firstFc = d3.min(pts.filter((p) => p.fc), (p) => p.x);
+    const st = sel().st;
+    regions.forEach((r, i) => {
+      const gx = (i % cols) * cw, gy = Math.floor(i / cols) * ch;
+      const m = {l: 30, r: 8, t: 18, b: 16};
+      const x = d3.scaleUtc(xs, [gx + m.l, gx + cw - m.r]);
+      const y = d3.scaleLinear([Math.floor(ext[0] / 5) * 5, Math.ceil(ext[1] / 5) * 5], [gy + ch - m.b, gy + m.t]);
+      const g = svg.append('g');
+      g.append('text').attr('x', gx + m.l).attr('y', gy + 12).attr('font-size', 11)
+        .attr('font-weight', r.group === st ? 700 : 400).attr('fill', 'var(--color-fg)').text(r.name);
+      for (const t of y.ticks(3)) {
+        g.append('line').attr('x1', gx + m.l).attr('x2', gx + cw - m.r).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', 'var(--cds-chart-grid)');
+        g.append('text').attr('x', gx + m.l - 4).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 9).attr('fill', 'var(--color-fg-muted)').text(t + '°');
+      }
+      const mine = pts.filter((p) => p.id === r.id).sort((a, b) => a.x - b.x);
+      if (firstFc) g.append('line').attr('x1', x(firstFc)).attr('x2', x(firstFc)).attr('y1', gy + m.t).attr('y2', gy + ch - m.b).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '2 3');
+      g.append('path').datum(mine).attr('fill', 'none').attr('stroke', 'var(--cds-chart-muted)').attr('stroke-dasharray', '3 3').attr('stroke-width', 1.5)
+        .attr('d', d3.line().x((p) => x(p.x)).y((p) => y(p.n)));
+      const obs = mine.filter((p) => !p.fc), fcs = mine.filter((p) => p.fc);
+      if (obs.length && fcs.length) fcs.unshift(obs[obs.length - 1]);
+      g.append('path').datum(obs).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-linejoin', 'round')
+        .attr('d', d3.line().x((p) => x(p.x)).y((p) => y(p.t)));
+      g.append('path').datum(fcs).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-dasharray', '4 3')
+        .attr('d', d3.line().x((p) => x(p.x)).y((p) => y(p.t)));
+      if (i >= regions.length - cols) {
+        for (const d of [xs[0], firstFc, xs[1]].filter(Boolean)) {
+          g.append('text').attr('x', x(d)).attr('y', gy + ch - 3).attr('text-anchor', d === xs[0] ? 'start' : d === xs[1] ? 'end' : 'middle')
+            .attr('font-size', 9).attr('fill', 'var(--color-fg-muted)').text((d.getUTCMonth() + 1) + '/' + d.getUTCDate());
+        }
+      }
+    });
+  });
+})();
+</script>
+
+</div>
+</body>
+</html>
